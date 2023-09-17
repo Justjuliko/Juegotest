@@ -12,10 +12,13 @@ public class GameScoreManager : MonoBehaviour
     string UserId;
     int score = 0;
 
+    int i = 0;
+
     public float timeRemaining = 10;
     public bool timerIsRunning = false;
     public TMP_Text countdownTimer;
     public GameObject clickableObj;
+    public GameObject scorePanel;
 
     public List<TextMeshProUGUI> scoreList;
 
@@ -43,6 +46,7 @@ public class GameScoreManager : MonoBehaviour
                 countdownTimer.text = ("Time has run out!");
                 WriteNewScore(score);
                 GetUsersHighestScores();
+                scorePanel.SetActive(true);
             }
         }
 
@@ -88,11 +92,11 @@ public class GameScoreManager : MonoBehaviour
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    foreach (var userDoc in (Dictionary<string, object>)snapshot.Value)
+                foreach (var userDoc in (Dictionary<string, object>)snapshot.Value)
                     {
                         Debug.Log($"{userDoc}");
                         var userObject = (Dictionary<string, object>)userDoc.Value;
-                        scoreList[1].text = userObject["username"] + " : " + userObject["score"];
+                        scoreList[i++].text = userObject["username"] + " : " + userObject["score"];
                         Debug.Log(userObject["username"] + " : " + userObject["score"]);
                     }
                 }
