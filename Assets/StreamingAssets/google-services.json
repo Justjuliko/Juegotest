@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "62238189775",
+    "firebase_url": "https://juegotest-94dd6-default-rtdb.firebaseio.com",
+    "project_id": "juegotest-94dd6",
+    "storage_bucket": "juegotest-94dd6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62238189775:android:05aa25176c70b633666fba",
+        "android_client_info": {
+          "package_name": "com.juliko.juegotest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8eu0KlnzCU5X_48cKv95rhXM7YOE1vPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
