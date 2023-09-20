@@ -1,6 +1,7 @@
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -45,6 +46,7 @@ public class GameScoreManager : MonoBehaviour
                 Destroy(clickableObj);
                 countdownTimer.text = ("Time has run out!");
                 WriteNewScore(score);
+                GetUserScore();
                 GetUsersHighestScores();
                 scorePanel.SetActive(true);
             }
@@ -82,7 +84,7 @@ public class GameScoreManager : MonoBehaviour
     public void GetUsersHighestScores()
     {
         FirebaseDatabase.DefaultInstance
-            .GetReference("users").OrderByChild("score").LimitToLast(5)
+            .GetReference("users").OrderByChild("score")
             .GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted)
@@ -92,19 +94,35 @@ public class GameScoreManager : MonoBehaviour
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                foreach (var userDoc in (Dictionary<string, object>)snapshot.Value)
+                    var userScores = new List<KeyValuePair<string, object>>();
+
+                    foreach (var userDoc in (Dictionary<string, object>)snapshot.Value)
                     {
-                        Debug.Log($"{userDoc}");
                         var userObject = (Dictionary<string, object>)userDoc.Value;
-                        scoreList[i++].text = userObject["username"] + " : " + userObject["score"];
-                        Debug.Log(userObject["username"] + " : " + userObject["score"]);
+                        string username = userObject["username"].ToString();
+                        int score = Convert.ToInt32(userObject["score"]);
+
+                        userScores.Add(new KeyValuePair<string, object>(username, score));
+                    }
+
+                    // Sort the user scores in descending order
+                    userScores.Sort((a, b) => -a.Value.ToString().CompareTo(b.Value.ToString()));
+
+                    for (int i = 0; i < userScores.Count; i++)
+                    {
+                        string username = userScores[i].Key;
+                        int score = (int)userScores[i].Value;
+
+                        scoreList[i].text = username + " : " + score;
+                        Debug.Log(username + " : " + score);
                     }
                 }
             });
     }
-}
-public class UserData 
-{
-    public int score;
-    public string username;
+
+    public class UserData
+    {
+        public int score;
+        public string username;
+    }
 }

@@ -26,23 +26,23 @@ public class ButtonResetPassword : MonoBehaviour
     private void HandleResetPasswordButton()
     {
         string emailAddress = _emailInputField.text;
-        if (FirebaseAuth.DefaultInstance.CurrentUser != null)
-        {
-            FirebaseAuth.DefaultInstance.SendPasswordResetEmailAsync(emailAddress).ContinueWith(task => {
-                if (task.IsCanceled)
-                {
-                    Debug.LogError("SendPasswordResetEmailAsync was canceled.");
-                    return;
-                }
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("SendPasswordResetEmailAsync encountered an error: " + task.Exception);
-                    return;
-                }
+        
+        var auth = FirebaseAuth.DefaultInstance;
 
-                Debug.Log("Password reset email sent successfully.");
-            });
-        }
+        FirebaseAuth.DefaultInstance.SendPasswordResetEmailAsync(emailAddress).ContinueWith(task => {
+            if (task.IsCanceled)
+            {
+                Debug.LogError("SendPasswordResetEmailAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("SendPasswordResetEmailAsync encountered an error: " + task.Exception);
+                return;
+            }
 
+            Debug.Log("Password reset email sent successfully.");
+        });
+     
     }
 }
